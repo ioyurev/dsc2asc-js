@@ -10,6 +10,11 @@ const CONFIG = {
         asc: { ext: '.asc', delimiter: ' ', decimal: '.', type: 'text/plain' },
         csv_std: { ext: '.csv', delimiter: ',', decimal: '.', type: 'text/csv' },
         csv_ru: { ext: '.csv', delimiter: ';', decimal: ',', type: 'text/csv' }
+    },
+    // Ключи для сохранения настроек в браузере
+    STORAGE_KEYS: {
+        FORMAT: 'dsc2asc_pref_format',
+        ENCODING: 'dsc2asc_pref_encoding'
     }
 };
 
@@ -70,7 +75,6 @@ class DSCParser {
                 step2Th: parseFloat(p[2]),
                 status: parseInt(p[8]),
                 ext: p[9].toLowerCase(),
-                // Другие поля пока не критичны
             });
         }
     }
@@ -93,7 +97,21 @@ class App {
     initUI() {
         const dropArea = document.getElementById('dropArea');
         const fileInput = document.getElementById('fileInput');
+        const formatSelect = document.getElementById('formatSelect');
+        const encodingSelect = document.getElementById('encodingSelect');
 
+        // 1. Восстановление сохраненных настроек
+        const savedFormat = localStorage.getItem(CONFIG.STORAGE_KEYS.FORMAT);
+        if (savedFormat && CONFIG.FORMATS[savedFormat]) {
+            formatSelect.value = savedFormat;
+        }
+
+        const savedEncoding = localStorage.getItem(CONFIG.STORAGE_KEYS.ENCODING);
+        if (savedEncoding) {
+            encodingSelect.value = savedEncoding;
+        }
+
+        // 2. Слушатели событий
         dropArea.addEventListener('click', () => fileInput.click());
         dropArea.addEventListener('keydown', e => { if(e.key==='Enter') fileInput.click(); });
         
@@ -115,11 +133,17 @@ class App {
             this.updateChartData(idx);
         });
 
-        // Слушатель смены кодировки (если пользователь загрузил, а потом поменял кодировку - перезагружаем DSC)
-        document.getElementById('encodingSelect').addEventListener('change', () => {
+        // Сохранение кодировки при изменении
+        encodingSelect.addEventListener('change', (e) => {
+            localStorage.setItem(CONFIG.STORAGE_KEYS.ENCODING, e.target.value);
             if (this.currentDscName && this.filesMap.has(this.currentDscName)) {
                 this.processDsc(this.filesMap.get(this.currentDscName));
             }
+        });
+
+        // Сохранение формата при изменении
+        formatSelect.addEventListener('change', (e) => {
+            localStorage.setItem(CONFIG.STORAGE_KEYS.FORMAT, e.target.value);
         });
     }
 
@@ -235,13 +259,12 @@ class App {
         let needed = 0;
 
         this.dscData.data.intervals.forEach(inv => {
-            if (inv.status === 0) return; // Пропускаем пустые (Fix 4)
+            if (inv.status === 0) return;
             needed++;
             const fname = `${base}.${inv.ext}`;
             if (this.filesMap.has(fname)) found++;
         });
 
-        const isComplete = found > 0 && found === needed;
         this.updateStatus('data', found > 0);
         
         const btn = document.getElementById('convertBtn');
@@ -319,7 +342,6 @@ class App {
             const buf = await this.readFileBuf(file);
             const yData = this.parseFloats(buf);
             
-            // Fix 1: Правильная математика для X
             const xData = [];
             for(let i=0; i<yData.length; i++) {
                 xData.push(interval.start2Th + (i * interval.step2Th));
@@ -328,7 +350,7 @@ class App {
             // Оптимизация для графика: если точек очень много, прореживаем для UI (не для экспорта)
             const displayX = [];
             const displayY = [];
-            const step = Math.ceil(xData.length / 5000); // Максимум 5000 точек на графике
+            const step = Math.ceil(xData.length / 5000); 
             for(let i=0; i<xData.length; i+=step) {
                 displayX.push(xData[i]);
                 displayY.push(yData[i]);
@@ -368,7 +390,6 @@ class App {
         let singleName = null;
 
         for (const interval of this.dscData.data.intervals) {
-            // Fix 4: Игнорируем статус 0
             if (interval.status === 0) continue;
 
             const fname = `${base}.${interval.ext}`;
@@ -378,7 +399,6 @@ class App {
             const buf = await this.readFileBuf(file);
             const yData = this.parseFloats(buf);
             
-            // Fix 1: Математика генерации
             let output = '';
             for(let i=0; i<yData.length; i++) {
                 const x = (interval.start2Th + (i * interval.step2Th)).toFixed(CONFIG.X_PRECISION);
@@ -400,7 +420,6 @@ class App {
 
         msg.textContent = `Готово: ${count}`;
 
-        // Fix 2: Логика ZIP vs Single
         if (count === 1) {
             this.download(singleContent, singleName, settings.type);
         } else if (count > 1) {

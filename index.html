@@ -11,7 +11,7 @@
         <!-- Левая панель: Управление -->
         <aside class="sidebar">
             <div class="brand">
-                <h1>DSC2ASC <span>Pro</span></h1>
+                <h1>DSC2ASC</h1>
                 <p>DRON-7 Data Processor</p>
             </div>
 
@@ -67,6 +67,11 @@
                     <div id="processInfo" class="process-info"></div>
                 </div>
             </div>
+
+            <!-- Footer с кнопкой "О программе" -->
+            <div class="sidebar-footer">
+                <button id="aboutBtn" class="btn-text">ℹ️ О программе</button>
+            </div>
         </aside>
 
         <!-- Правая панель: Визуализация и Инфо -->
@@ -99,6 +104,32 @@
         </main>
     </div>
 
+    <!-- Модальное окно -->
+    <div id="aboutModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button id="closeModal" class="modal-close">&times;</button>
+            <h2>О проекте DSC2ASC</h2>
+            <p>Инструмент для конвертации и просмотра данных дифрактометра ДРОН-7.</p>
+            <div class="modal-details">
+                <div class="detail-row">
+                    <strong>Версия:</strong> <span>1.0.0</span>
+                </div>
+                <div class="detail-row">
+                    <strong>Лицензия:</strong> <span>MIT</span>
+                </div>
+                <div class="detail-row">
+                    <strong>Стек:</strong> <span>JS, Chart.js, JSZip</span>
+                </div>
+                <div class="detail-row">
+                    <strong>Автор:</strong> <span>Юрьев Илья Олегович <a href="mailto:i.o.yurev@ya.ru">i.o.yurev@ya.ru</a></span>
+                </div>
+            </div>
+
+            <div class="modal-links">
+                <a href="https://gitflic.ru/project/i-o-yurev/dsc2asc-js" target="_blank" class="modal-link repo">📂 Git-репозиторий</a>
+            </div>
+        </div>
+    </div>
     <script type="module" src="/src/script.js"></script>
 </body>
 </html>

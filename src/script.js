@@ -87,6 +87,7 @@ class App {
         
         this.initUI();
         this.initChart();
+        this.initModal();
     }
 
     initUI() {
@@ -118,6 +119,27 @@ class App {
         document.getElementById('encodingSelect').addEventListener('change', () => {
             if (this.currentDscName && this.filesMap.has(this.currentDscName)) {
                 this.processDsc(this.filesMap.get(this.currentDscName));
+            }
+        });
+    }
+
+    initModal() {
+        const modal = document.getElementById('aboutModal');
+        const openBtn = document.getElementById('aboutBtn');
+        const closeBtn = document.getElementById('closeModal');
+
+        openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+        closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+        
+        // Закрытие по клику на фон
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.add('hidden');
+        });
+
+        // Закрытие по Esc
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
             }
         });
     }

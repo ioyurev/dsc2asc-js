@@ -146,6 +146,25 @@ body {
     height: 20px;
 }
 
+/* Footer & About Btn */
+.sidebar-footer {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+}
+.btn-text {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+.btn-text:hover { background: #f1f5f9; color: var(--primary); }
+
 /* --- Main View --- */
 .main-view {
     display: grid;
@@ -247,6 +266,58 @@ body {
     color: #94a3b8;
     margin-top: 40px;
 }
+
+/* --- Modal --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.2s;
+}
+.modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 400px;
+    max-width: 90%;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+.modal-close {
+    position: absolute;
+    top: 15px; right: 15px;
+    background: none; border: none;
+    font-size: 24px; color: #94a3b8;
+    cursor: pointer;
+}
+.modal-content h2 { font-size: 20px; color: var(--bg-dark); margin-bottom: 10px; }
+.modal-content p { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
+.modal-details { background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+.detail-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; }
+.detail-row:last-child { margin-bottom: 0; }
+.modal-links { text-align: center; }
+.modal-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background: var(--bg-dark);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+.modal-link:hover { background: #334155; }
+.modal-footer-text { margin-top: 20px; font-size: 11px; text-align: center; color: #cbd5e1; margin-bottom: 0; }
 
 @media (max-width: 900px) {
     .app-container { grid-template-columns: 1fr; grid-template-rows: auto 1fr; overflow-y: auto; }

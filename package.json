@@ -1,0 +1,21 @@
+{
+  "name": "dsc2asc-js",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:single": "vite build -c vite.config.single.js && node rename-single-file.js",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "terser": "^5.44.1",
+    "vite": "^5.0.0",
+    "vite-plugin-singlefile": "^2.3.0"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.1",
+    "jszip": "^3.10.1"
+  }
+}

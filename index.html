@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSC2ASC Scientific Converter</title>
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Левая панель: Управление -->
+        <aside class="sidebar">
+            <div class="brand">
+                <h1>DSC2ASC <span>Pro</span></h1>
+                <p>DRON-7 Data Processor</p>
+            </div>
+
+            <div class="control-panel">
+                <!-- Зона загрузки -->
+                <div class="drop-area" id="dropArea" tabindex="0">
+                    <div class="drop-content">
+                        <span class="icon">📂</span>
+                        <p>Drag & Drop<br><small>.dsc + .d01 files</small></p>
+                    </div>
+                    <input type="file" id="fileInput" class="file-input" multiple>
+                </div>
+
+                <!-- Статус файлов -->
+                <div class="status-group">
+                    <div class="status-item" id="dscStatus">
+                        <span class="indicator"></span>
+                        <span class="label">DSC Описание</span>
+                    </div>
+                    <div class="status-item" id="dataStatus">
+                        <span class="indicator"></span>
+                        <span class="label">D01 Данные</span>
+                    </div>
+                </div>
+
+                <div class="separator"></div>
+
+                <!-- Настройки -->
+                <div class="settings-form">
+                    <div class="form-group">
+                        <label>Кодировка DSC</label>
+                        <select id="encodingSelect">
+                            <option value="windows-1251" selected>Windows-1251 (Rus)</option>
+                            <option value="utf-8">UTF-8</option>
+                            <option value="ibm866">DOS (IBM866)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Формат вывода</label>
+                        <select id="formatSelect">
+                            <option value="asc">.ASC (Space, Dot)</option>
+                            <option value="csv_std">.CSV (Comma, Dot)</option>
+                            <option value="csv_ru">.CSV (Semicolon, Comma)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button id="convertBtn" class="btn-primary" disabled>
+                        Конвертировать и скачать
+                    </button>
+                    <div id="processInfo" class="process-info"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Правая панель: Визуализация и Инфо -->
+        <main class="main-view">
+            <!-- Верхняя часть: График -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3>Предпросмотр данных</h3>
+                    <div class="chart-controls">
+                        <label>Интервал:</label>
+                        <select id="intervalSelect" disabled>
+                            <option>Нет данных</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="canvas-wrapper">
+                    <canvas id="spectrumChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Нижняя часть: Метаданные -->
+            <div class="info-container">
+                <div class="info-header">Параметры эксперимента</div>
+                <div class="info-scroll-area">
+                    <div class="info-grid" id="metaInfo">
+                        <div class="placeholder-text">Загрузите .dsc файл для просмотра параметров</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="/src/script.js"></script>
+</body>
+</html>
